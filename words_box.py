@@ -44,13 +44,17 @@ class WordsBox(Gtk.VBox):
         self.pack_start(self.time_label, False, False, 0)
 
         self.boxes = []
-        self.boxes_limit = 5
+        self.boxes_limit = 8
         self.start_count = 0
         self.time_limit = 30
         self.time_count = 0
 
+        scroll = Gtk.ScrolledWindow()
+        scroll.set_size_request(1, 100)
+        self.pack_start(scroll, False, False, 10)
+
         self.boxes_section = Gtk.VBox()
-        self.pack_start(self.boxes_section, False, False, 50)
+        scroll.add(self.boxes_section)
 
         hbox = Gtk.HBox()
         hbox.set_border_width(15)
