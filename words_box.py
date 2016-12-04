@@ -49,7 +49,7 @@ class WordsBox(Gtk.VBox):
         self.boxes = []
         self.boxes_limit = 10
         self.start_count = 0
-        self.time_limit = 10
+        self.time_limit = 30
         self.time_count = 0
 
         scroll = Gtk.ScrolledWindow()
