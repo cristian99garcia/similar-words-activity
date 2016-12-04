@@ -34,7 +34,8 @@ class Game(Gtk.VBox):
 
 if __name__ == "__main__":
     win = Gtk.Window()
-    win.set_title("Synonyms and Antonyms game")
+    win.set_title("Similar and Different words game")
+    win.set_icon_from_file("activity/icon.svg")
     win.maximize()
 
     game = Game()

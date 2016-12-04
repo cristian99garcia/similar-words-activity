@@ -18,8 +18,8 @@
 from utils import get_words, get_word_type
 from consts import WordType
 from buttonbox import ButtonBox
-from sections import SynonymSection
-from sections import AntonymSection
+from sections import SimilarSection
+from sections import DifferentSection
 
 import gi
 gi.require_version("Gtk", "3.0")
@@ -63,13 +63,13 @@ class WordsBox(Gtk.VBox):
         hbox.set_border_width(15)
         self.pack_start(hbox, True, True, 0)
 
-        self.synonym_section = SynonymSection()
-        self.synonym_section.connect("restore-button", self._restore_button)
-        hbox.pack_start(self.synonym_section, True, True, 2)
+        self.similar_section = SimilarSection()
+        self.similar_section.connect("restore-button", self._restore_button)
+        hbox.pack_start(self.similar_section, True, True, 2)
 
-        self.antonym_section = AntonymSection()
-        self.antonym_section.connect("restore-button", self._restore_button)
-        hbox.pack_start(self.antonym_section, True, True, 2)
+        self.different_section = DifferentSection()
+        self.different_section.connect("restore-button", self._restore_button)
+        hbox.pack_start(self.different_section, True, True, 2)
 
         self.start()
         self.show_all()
@@ -147,24 +147,24 @@ class WordsBox(Gtk.VBox):
     def game_over(self):
         matched = 0
         self.boxes_section.set_sensitive(False)
-        self.synonym_section.vbox.set_sensitive(False)
-        self.antonym_section.vbox.set_sensitive(False)
+        self.similar_section.vbox.set_sensitive(False)
+        self.different_section.vbox.set_sensitive(False)
 
-        for word in self.synonym_section.get_words():
-            if get_word_type(self.words, word) == WordType.SYNONYM:
-                self.synonym_section.set_correct_word(word)
+        for word in self.similar_section.get_words():
+            if get_word_type(self.words, word) == WordType.SIMILAR:
+                self.similar_section.set_correct_word(word)
                 matched += 1
 
             else:
-                self.synonym_section.set_incorrect_word(word)
+                self.similar_section.set_incorrect_word(word)
 
-        for word in self.antonym_section.get_words():
-            if get_word_type(self.words, word) == WordType.ANTONYM:
-                self.antonym_section.set_correct_word(word)
+        for word in self.different_section.get_words():
+            if get_word_type(self.words, word) == WordType.DIFFERENT:
+                self.different_section.set_correct_word(word)
                 matched += 1
 
             else:
-                self.antonym_section.set_incorrect_word(word)
+                self.different_section.set_incorrect_word(word)
 
         self.label.set_text("You matched %d of %d words" % (matched, len(self.words)))
         self.time_label.set_text("Time ended!")
@@ -177,11 +177,11 @@ class WordsBox(Gtk.VBox):
         while len(self.boxes_section.get_children()) > 0:
             self.boxes_section.remove(self.boxes_section.get_children()[0])
 
-        self.synonym_section.vbox.set_sensitive(True)
-        self.synonym_section.clear()
+        self.similar_section.vbox.set_sensitive(True)
+        self.similar_section.clear()
 
-        self.antonym_section.vbox.set_sensitive(True)
-        self.antonym_section.clear()
+        self.different_section.vbox.set_sensitive(True)
+        self.different_section.clear()
 
         self.label.set_label("The word is...")
 

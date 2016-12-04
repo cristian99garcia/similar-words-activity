@@ -1,5 +1,5 @@
 [Activity]
-name = Synonms and Antonyms
+name = Similar words
 activity_version = 3
 bundle_id = org.sugarlabs.SynonmAntonym
 exec = sugar-activity GameActivity.GameActivity

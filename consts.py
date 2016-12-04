@@ -49,49 +49,49 @@ else:
 
 
 class WordType:  # Best enum ever
-    SYNONYM = 1
-    ANTONYM = 2
+    SIMILAR = 1
+    DIFFERENT = 2
 
 
 WORDS_DATA = {
     "Hello": [
-        [WordType.SYNONYM, "Greetings"],
-        [WordType.ANTONYM, "Goodbye"],
-        [WordType.SYNONYM, "Hi"],
-        [WordType.SYNONYM, "Welcome"],
-        [WordType.SYNONYM, "Howdy"],
-        [WordType.ANTONYM, "Until next time!"],
-        [WordType.SYNONYM, "What's up"],
-        [WordType.SYNONYM, "How are you?"],
-        [WordType.ANTONYM, "Bye bye"],
+        [WordType.SIMILAR, "Greetings"],
+        [WordType.DIFFERENT, "Goodbye"],
+        [WordType.SIMILAR, "Hi"],
+        [WordType.SIMILAR, "Welcome"],
+        [WordType.SIMILAR, "Howdy"],
+        [WordType.DIFFERENT, "Until next time!"],
+        [WordType.SIMILAR, "What's up"],
+        [WordType.SIMILAR, "How are you?"],
+        [WordType.DIFFERENT, "Bye bye"],
     ],
     "Congratulations": [
-        [WordType.ANTONYM, "You did bad"],
-        [WordType.SYNONYM, "Compliments"],
-        [WordType.SYNONYM, "Good work"],
-        [WordType.SYNONYM, "Cheers"],
-        [WordType.ANTONYM, "Bad luck"],
-        [WordType.ANTONYM, "Terrible job"],
-        [WordType.SYNONYM, "Hats off"],
-        [WordType.SYNONYM, "Well done"],
-        [WordType.ANTONYM, "Dig"],
-        [WordType.ANTONYM, "Berate"],
+        [WordType.DIFFERENT, "You did bad"],
+        [WordType.SIMILAR, "Compliments"],
+        [WordType.SIMILAR, "Good work"],
+        [WordType.SIMILAR, "Cheers"],
+        [WordType.DIFFERENT, "Bad luck"],
+        [WordType.DIFFERENT, "Terrible job"],
+        [WordType.SIMILAR, "Hats off"],
+        [WordType.SIMILAR, "Well done"],
+        [WordType.DIFFERENT, "Dig"],
+        [WordType.DIFFERENT, "Berate"],
     ],
     "Tool": [
-        [WordType.SYNONYM, "Utensil"],
-        [WordType.ANTONYM, "Plaything"],
-        [WordType.SYNONYM, "Instument"],
-        [WordType.SYNONYM, "Device"],
-        [WordType.ANTONYM, "Useless thing"],
+        [WordType.SIMILAR, "Utensil"],
+        [WordType.DIFFERENT, "Plaything"],
+        [WordType.SIMILAR, "Instument"],
+        [WordType.SIMILAR, "Device"],
+        [WordType.DIFFERENT, "Useless thing"],
     ],
     "Meal": [
-        [WordType.SYNONYM, "Lunch"],
-        [WordType.ANTONYM, "Hungry"],
-        [WordType.ANTONYM, "Abstinence"],
-        [WordType.SYNONYM, "Dinner"],
-        [WordType.SYNONYM, "Snack"],
-        [WordType.SYNONYM, "Food"],
-        [WordType.ANTONYM, "Fast"],
-        [WordType.SYNONYM, "Aliment"],
+        [WordType.SIMILAR, "Lunch"],
+        [WordType.DIFFERENT, "Hungry"],
+        [WordType.DIFFERENT, "Abstinence"],
+        [WordType.SIMILAR, "Dinner"],
+        [WordType.SIMILAR, "Snack"],
+        [WordType.SIMILAR, "Food"],
+        [WordType.DIFFERENT, "Fast"],
+        [WordType.SIMILAR, "Aliment"],
     ]
 }

@@ -109,11 +109,11 @@ class Section(Gtk.VBox):
         self.vbox.connect("drag-data-received", self.on_drag_data_received)
         scroll.add(self.vbox)
 
-        if self.type == WordType.SYNONYM:
-            self.label.set_text("Synonyms:")
+        if self.type == WordType.SIMILAR:
+            self.label.set_text("Similar:")
 
-        elif self.type == WordType.ANTONYM:
-            self.label.set_text("Antonyms:")
+        elif self.type == WordType.DIFFERENT:
+            self.label.set_text("Different:")
 
     def on_drag_data_received(self, widget, drag_context, x, y, data, info, time):
         item = SectionItem(data.get_text())
@@ -158,13 +158,13 @@ class Section(Gtk.VBox):
                 del item
 
 
-class SynonymSection(Section):
+class SimilarSection(Section):
 
     def __init__(self):
-        Section.__init__(self, WordType.SYNONYM)
+        Section.__init__(self, WordType.SIMILAR)
 
 
-class AntonymSection(Section):
+class DifferentSection(Section):
 
     def __init__(self):
-        Section.__init__(self, WordType.ANTONYM)
+        Section.__init__(self, WordType.DIFFERENT)
