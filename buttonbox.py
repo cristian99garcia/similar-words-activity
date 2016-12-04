@@ -15,8 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-import cairo
-
+from utils import make_pixbuf
 from consts import WordType, DRAG_TARGETS, DRAG_ACTION
 
 import gi
@@ -25,7 +24,6 @@ gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
-from gi.repository import GdkPixbuf
 
 
 class WordButton(Gtk.Button):
@@ -44,36 +42,9 @@ class WordButton(Gtk.Button):
         self.set_border_width(2)
 
         self.drag_source_set(Gdk.ModifierType.BUTTON1_MASK, DRAG_TARGETS, DRAG_ACTION)
-        self.drag_source_set_icon_pixbuf(self.make_pixbuf())
+        self.drag_source_set_icon_pixbuf(make_pixbuf(self.word))
 
         self.connect("drag-data-get", self.on_drag_data_get)
-
-    def make_pixbuf(self):
-        font_size = 38
-        font_family = "Arial"
-
-        surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, 200, 200)
-        context = cairo.Context(surface)
-        context.select_font_face(font_family, cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
-        context.set_font_size(font_size)
-
-        (x, y, width, height, dx, dy) = context.text_extents(self.word)
-        border = 15
-        svg_width = width + border * 2
-        svg_height = height + border * 2
-
-        svg = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n' +\
-              ('<svg width="%d" height="%d">\n' % (svg_width, svg_height)) +\
-              ('<rect x="0" y="0" width="%d" height="%d" fill="#FFFFFF"></rect>\n' % (svg_width, svg_height)) +\
-              ('<text x="%d" y="%d" fill="balck" font-family="%s" font-size="%s">%s</text>\n' % (svg_width / 2 - width / 2, svg_height / 2 + height / 2, font_family, font_size, self.word)) +\
-              '</svg>'
-
-        loader = GdkPixbuf.PixbufLoader()
-        loader.write(svg.encode())
-        loader.close()
-        pixbuf = loader.get_pixbuf()
-
-        return pixbuf
 
     def on_drag_data_get(self, widget, drag_context, data, info, time):
         data.set_text(self.word, -1)

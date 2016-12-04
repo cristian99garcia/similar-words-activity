@@ -15,6 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
+from utils import make_pixbuf
 from consts import WordType, DRAG_TARGETS, DRAG_ACTION
 
 import gi
@@ -26,14 +27,17 @@ from gi.repository import Pango
 from gi.repository import GObject
 
 
-class SectionItem(Gtk.HBox):
+class SectionItem(Gtk.EventBox):
 
     __gsignals__ = {
+        "change-me": (GObject.SIGNAL_RUN_FIRST, None, []),
         "remove-me": (GObject.SIGNAL_RUN_FIRST, None, []),
     }
 
     def __init__(self, word):
-        Gtk.HBox.__init__(self)
+        Gtk.EventBox.__init__(self)
+
+        self.word = word
 
         self.set_size_request(1, 20)
         self.set_border_width(2)
@@ -46,17 +50,27 @@ class SectionItem(Gtk.HBox):
             self.set_margin_left(20)
             self.set_margin_right(20)
 
+        self.drag_source_set(Gdk.ModifierType.BUTTON1_MASK, DRAG_TARGETS, DRAG_ACTION)
+        self.drag_source_set_icon_pixbuf(make_pixbuf(self.word))
+
         #self.override_background_color(Gtk.StateType.NORMAL, Gdk.RGBA(.7,.7,.7,1))
 
-        self.word = word
+        self.hbox = Gtk.HBox()
+        self.add(self.hbox)
 
         self.label = Gtk.Label.new(word)
         self.label.modify_font(Pango.FontDescription("15"))
-        self.pack_start(self.label, False, False, 0)
+        self.hbox.pack_start(self.label, False, False, 0)
 
         self.button = Gtk.Button.new_from_icon_name("window-close", Gtk.IconSize.BUTTON)
         self.button.connect("clicked", self._clicked)
-        self.pack_end(self.button, False, False, 0)
+        self.hbox.pack_end(self.button, False, False, 0)
+
+        self.connect("drag-data-get", self.on_drag_data_get)
+
+    def on_drag_data_get(self, widget, drag_context, data, info, time):
+        data.set_text(self.word, -1)
+        self.emit("change-me")
 
     def _clicked(self, button):
         self.emit("remove-me")
@@ -96,10 +110,15 @@ class Section(Gtk.VBox):
 
     def on_drag_data_received(self, widget, drag_context, x, y, data, info, time):
         item = SectionItem(data.get_text())
+        item.connect("change-me", self._change_item)
         item.connect("remove-me", self._remove_item)
         self.vbox.pack_start(item, False, False, 1)
 
         self.show_all()
+
+    def _change_item(self, item):
+        self.vbox.remove(item)
+        del item
 
     def _remove_item(self, item):
         self.emit("restore-button", item.word)

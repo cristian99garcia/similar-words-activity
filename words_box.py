@@ -44,7 +44,7 @@ class WordsBox(Gtk.VBox):
         self.pack_start(self.time_label, False, False, 0)
 
         self.boxes = []
-        self.boxes_limit = 8
+        self.boxes_limit = 10
         self.start_count = 0
         self.time_limit = 30
         self.time_count = 0
