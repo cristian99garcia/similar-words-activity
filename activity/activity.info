@@ -1,0 +1,6 @@
+[Activity]
+name = Synonms and Antonyms
+activity_version = 3
+bundle_id = org.sugarlabs.SynonmAntonym
+exec = sugar-activity GameActivity.GameActivity
+icon = icon
