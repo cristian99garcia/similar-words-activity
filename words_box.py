@@ -51,6 +51,7 @@ class WordsBox(Gtk.VBox):
         self.start_count = 0
         self.time_limit = 30
         self.time_count = 0
+        self.in_game = False
 
         scroll = Gtk.ScrolledWindow()
         scroll.set_size_request(1, 100)
@@ -71,6 +72,15 @@ class WordsBox(Gtk.VBox):
         self.different_section.connect("restore-button", self._restore_button)
         hbox.pack_start(self.different_section, True, True, 2)
 
+        bbox = Gtk.ButtonBox()
+        bbox.set_layout(Gtk.ButtonBoxStyle.CENTER)
+        self.pack_start(bbox, False, False, 10)
+
+        self.stop_button = Gtk.Button("I finish!")
+        self.stop_button.set_sensitive(False)
+        self.stop_button.connect("clicked", self._force_stop)
+        bbox.add(self.stop_button)
+
         self.start()
         self.show_all()
 
@@ -86,14 +96,24 @@ class WordsBox(Gtk.VBox):
 
         GObject.timeout_add(1000, self._start_timeout)
 
+    def _force_stop(self, button):
+        self.time_count = 0
+        self.in_game = False
+        self.game_over()
+
     def _start_timeout(self):
         if self.start_count == 0:
+            self.in_game = True
             self.select_words()
             self.show_buttons()
+            self.stop_button.set_sensitive(True)
+
             GObject.timeout_add(1000, self._time_timeout)
+
             return False
 
         elif self.start_count == 3:
+            self.in_game = True
             self.time_label.set_text("Ready")
 
         elif self.start_count == 2:
@@ -107,6 +127,9 @@ class WordsBox(Gtk.VBox):
         return True
 
     def _time_timeout(self):
+        if not self.in_game:
+            return False
+
         if self.time_count == 0:
             self.game_over()
             return False
@@ -149,6 +172,7 @@ class WordsBox(Gtk.VBox):
         self.boxes_section.set_sensitive(False)
         self.similar_section.vbox.set_sensitive(False)
         self.different_section.vbox.set_sensitive(False)
+        self.stop_button.set_sensitive(False)
 
         for word in self.similar_section.get_words():
             if get_word_type(self.words, word) == WordType.SIMILAR:
@@ -184,6 +208,7 @@ class WordsBox(Gtk.VBox):
         self.different_section.clear()
 
         self.label.set_label("The word is...")
+        self.time_label.set_label("Ready")
 
         self.start()
 
