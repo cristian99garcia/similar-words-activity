@@ -19,6 +19,10 @@ import cairo
 import random
 from consts import WORDS_DATA
 
+import gi
+gi.require_version("Gtk", "3.0")
+
+from gi.repository import Gtk
 from gi.repository import GdkPixbuf
 
 
@@ -62,3 +66,11 @@ def get_word_type(words, word):
     for data in words:
         if data[1] == word:
             return data[0]
+
+
+def make_separator(expand=True):
+    separator = Gtk.SeparatorToolItem()
+    separator.props.draw = not expand
+    separator.set_expand(expand)
+
+    return separator

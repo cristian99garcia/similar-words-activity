@@ -16,7 +16,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 from utils import make_pixbuf
-from consts import WordType, DRAG_TARGETS, DRAG_ACTION, CORRECT_COLOR, INCORRECT_COLOR
+from consts import WordType, DRAG_TARGETS, DRAG_ACTION, CORRECT_COLOR, INCORRECT_COLOR, SECTION_BG_COLOR
 
 import gi
 gi.require_version("Gtk", "3.0")
@@ -104,7 +104,7 @@ class Section(Gtk.VBox):
 
         self.vbox = Gtk.VBox()
         self.vbox.set_border_width(10)
-        self.vbox.override_background_color(Gtk.StateType.NORMAL, Gdk.RGBA(.5,.5,.5,1))
+        self.vbox.override_background_color(Gtk.StateType.NORMAL, SECTION_BG_COLOR)
         self.vbox.drag_dest_set(Gtk.DestDefaults.ALL, DRAG_TARGETS, DRAG_ACTION)
         self.vbox.connect("drag-data-received", self.on_drag_data_received)
         scroll.add(self.vbox)
