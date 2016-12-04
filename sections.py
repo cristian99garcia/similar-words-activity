@@ -16,7 +16,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 from utils import make_pixbuf
-from consts import WordType, DRAG_TARGETS, DRAG_ACTION
+from consts import WordType, DRAG_TARGETS, DRAG_ACTION, CORRECT_COLOR, INCORRECT_COLOR
 
 import gi
 gi.require_version("Gtk", "3.0")
@@ -75,6 +75,12 @@ class SectionItem(Gtk.EventBox):
     def _clicked(self, button):
         self.emit("remove-me")
 
+    def set_correct(self):
+        self.label.override_color(Gtk.StateFlags.INSENSITIVE, CORRECT_COLOR)
+
+    def set_incorrect(self):
+        self.label.override_color(Gtk.StateFlags.INSENSITIVE, INCORRECT_COLOR)
+
 
 class Section(Gtk.VBox):
 
@@ -86,6 +92,7 @@ class Section(Gtk.VBox):
         Gtk.VBox.__init__(self)
 
         self.type = type
+        self.items = []
 
         self.label = Gtk.Label()
         self.label.modify_font(Pango.FontDescription("15"))
@@ -114,6 +121,8 @@ class Section(Gtk.VBox):
         item.connect("remove-me", self._remove_item)
         self.vbox.pack_start(item, False, False, 1)
 
+        self.items.append(item)
+
         self.show_all()
 
     def _change_item(self, item):
@@ -124,6 +133,29 @@ class Section(Gtk.VBox):
         self.emit("restore-button", item.word)
         self.vbox.remove(item)
         del item
+
+    def get_words(self):
+        words = [item.word for item in self.items]
+        return words
+
+    def set_correct_word(self, word):
+        for item in self.items:
+            if item.word == word:
+                item.set_correct()
+                break
+
+    def set_incorrect_word(self, word):
+        for item in self.items:
+            if item.word == word:
+                item.set_incorrect()
+                break
+
+    def clear(self):
+        while len(self.items) > 0:
+            for item in self.items:
+                self.vbox.remove(item)
+                self.items.remove(item)
+                del item
 
 
 class SynonymSection(Section):

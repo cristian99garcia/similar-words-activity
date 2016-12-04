@@ -23,8 +23,27 @@ from gi.repository import Gdk
 
 DRAG_TARGETS = [Gtk.TargetEntry.new("TEXT", 0, 0)]
 DRAG_ACTION = Gdk.DragAction.MOVE
-
+CORRECT_COLOR = Gdk.RGBA(0.2, 1, 0.2, 1)
+INCORRECT_COLOR = Gdk.RGBA(1, 0.2, 0.2, 1)
 
 class WordType:  # Best enum ever
     SYNONYM = 1
     ANTONYM = 2
+
+
+WORDS_DATA = {
+    "Test": [
+        [WordType.SYNONYM, "SHreger"],
+        [WordType.SYNONYM, "SQadhrwwdgr"],
+        [WordType.ANTONYM, "AYgf"],
+        [WordType.SYNONYM, "SHtesdbr"],
+        [WordType.ANTONYM, "AHedvvsr"],
+        [WordType.ANTONYM, "AGryj"],
+        [WordType.SYNONYM, "SRegeewdfaets"],
+        [WordType.ANTONYM, "AGwsdvtt"],
+        [WordType.SYNONYM, "SUinvfobt"],
+        [WordType.ANTONYM, "AMobrenth"],
+        [WordType.SYNONYM, "SPolqnirw"],
+        [WordType.ANTONYM, "AQonngek"],
+    ]
+}

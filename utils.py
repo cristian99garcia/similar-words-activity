@@ -16,6 +16,8 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import cairo
+import random
+from consts import WORDS_DATA
 
 from gi.repository import GdkPixbuf
 
@@ -46,3 +48,17 @@ def make_pixbuf(word):
     pixbuf = loader.get_pixbuf()
 
     return pixbuf
+
+
+def get_words():
+    word = WORDS_DATA.keys()[random.randint(0, len(WORDS_DATA) - 1)]
+    words = WORDS_DATA[word]
+    random.shuffle(words)
+
+    return word, words
+
+
+def get_word_type(words, word):
+    for data in words:
+        if data[1] == word:
+            return data[0]

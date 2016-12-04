@@ -15,6 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
+from utils import get_words, get_word_type
 from consts import WordType
 from buttonbox import ButtonBox
 from sections import SynonymSection
@@ -35,7 +36,7 @@ class WordsBox(Gtk.VBox):
 
         self.set_size_request(1, 200)
 
-        self.label = Gtk.Label.new("Test")
+        self.label = Gtk.Label.new("The word is...")
         self.label.modify_font(Pango.FontDescription("Bold 32"))
         self.pack_start(self.label, False, False, 10)
 
@@ -43,10 +44,12 @@ class WordsBox(Gtk.VBox):
         self.time_label.modify_font(Pango.FontDescription("Bold 18"))
         self.pack_start(self.time_label, False, False, 0)
 
+        self.word = None
+        self.words = []
         self.boxes = []
         self.boxes_limit = 10
         self.start_count = 0
-        self.time_limit = 30
+        self.time_limit = 10
         self.time_count = 0
 
         scroll = Gtk.ScrolledWindow()
@@ -105,8 +108,7 @@ class WordsBox(Gtk.VBox):
 
     def _time_timeout(self):
         if self.time_count == 0:
-            # TODO: count correct words and
-            self.time_label.set_text("Time ended!")
+            self.game_over()
             return False
 
         self.time_count -= 1
@@ -115,20 +117,8 @@ class WordsBox(Gtk.VBox):
         return True
 
     def select_words(self):
-        self.words = [
-            [WordType.SYNONYM, "Hreger"],
-            [WordType.SYNONYM, "Qadhrwwdgr"],
-            [WordType.ANTONYM, "Ygf"],
-            [WordType.SYNONYM, "Htesdbr"],
-            [WordType.ANTONYM, "Hedvvsr"],
-            [WordType.ANTONYM, "Gryj"],
-            [WordType.SYNONYM, "Regeewdfaets"],
-            [WordType.ANTONYM, "Gwsdvtt"],
-            [WordType.SYNONYM, "Uinvfobt"],
-            [WordType.ANTONYM, "Mobrenth"],
-            [WordType.SYNONYM, "Polqnirw"],
-            [WordType.ANTONYM, "Qonngek"],
-        ]
+        self.word, self.words = get_words()
+        self.label.set_text(self.word)
 
     def make_box(self):
         box = ButtonBox()
@@ -153,3 +143,48 @@ class WordsBox(Gtk.VBox):
             box.append_word(type, word)
 
         self.show_all()
+
+    def game_over(self):
+        matched = 0
+        self.boxes_section.set_sensitive(False)
+        self.synonym_section.vbox.set_sensitive(False)
+        self.antonym_section.vbox.set_sensitive(False)
+
+        for word in self.synonym_section.get_words():
+            if get_word_type(self.words, word) == WordType.SYNONYM:
+                self.synonym_section.set_correct_word(word)
+                matched += 1
+
+            else:
+                self.synonym_section.set_incorrect_word(word)
+
+        for word in self.antonym_section.get_words():
+            if get_word_type(self.words, word) == WordType.ANTONYM:
+                self.antonym_section.set_correct_word(word)
+                matched += 1
+
+            else:
+                self.antonym_section.set_incorrect_word(word)
+
+        self.label.set_text("You matched %d of %d words" % (matched, len(self.words)))
+        self.time_label.set_text("Time ended!")
+
+        GObject.timeout_add(3000, self._restart)
+
+    def _restart(self):
+        self.boxes_section.set_sensitive(True)
+
+        while len(self.boxes_section.get_children()) > 0:
+            self.boxes_section.remove(self.boxes_section.get_children()[0])
+
+        self.synonym_section.vbox.set_sensitive(True)
+        self.synonym_section.clear()
+
+        self.antonym_section.vbox.set_sensitive(True)
+        self.antonym_section.clear()
+
+        self.label.set_label("The word is...")
+
+        self.start()
+
+        return False
