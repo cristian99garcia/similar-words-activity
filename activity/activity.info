@@ -1,6 +1,6 @@
 [Activity]
 name = Similar words
 activity_version = 3
-bundle_id = org.sugarlabs.SynonmAntonym
+bundle_id = org.sugarlabs.SimilarWords
 exec = sugar-activity GameActivity.GameActivity
 icon = icon
